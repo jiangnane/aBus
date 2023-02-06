@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jiangnane.abus">
+
+    <!--  如果一个APP中即是服务端，也要用客户端的API，则APP种以下两部分都要添加  -->
+
+    <!--  客户端需添加的内容 BEGIN  -->
+    <uses-permission android:name="${PACKAGE_NAME}.PROVIDER_CALL" />
+    <!--  客户端需添加的内容 END  -->
+
+    <!--  服务端需添加的内容 BEGIN  -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <permission
+        android:name="${PACKAGE_NAME}.PROVIDER_CALL"
+        android:protectionLevel="signature" />
+    <application>
+        <provider
+            android:name=".server.BinderProvider"
+            android:authorities="${PACKAGE_NAME}.Binder"
+            android:enabled="true"
+            android:exported="true"
+            android:multiprocess="false"
+            android:permission="${PACKAGE_NAME}.PROVIDER_CALL"
+            android:process=":${PROVIDER_PROCESS_NAME}" />
+        <service
+            android:name=".server.DaemonService"
+            android:process=":${PROVIDER_PROCESS_NAME}" />
+        <service
+            android:name=".server.DaemonService$InnerService"
+            android:process=":${PROVIDER_PROCESS_NAME}" />
+    </application>
+    <!--  服务端需添加的内容 END  -->
+</manifest>

@@ -1,0 +1,50 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    defaultConfig {
+
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+
+        manifestPlaceholders = [
+                PACKAGE_NAME            : rootProject.ext.android["packageName"],
+                PROVIDER_PROCESS_NAME   : rootProject.ext.android["binderProcessName"],
+                PACKAGE_NAME            : rootProject.ext.android["packageName"],
+        ]
+
+        buildConfigField("String", "versionName", "\"" + rootProject.ext.android["versionName"] + "\"")
+        buildConfigField("String", "authoritiesPrefix", "\"" + rootProject.ext.android["packageName"] + "\"")
+        buildConfigField("String", "binderKey", "\"" + rootProject.ext.android["binderKey"] + "\"")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    android.libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "../abus_${rootProject.ext.android["versionName"]}_api_release.aar"
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.annotation:annotation:1.2.0'
+}
+
